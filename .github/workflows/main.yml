@@ -47,4 +47,6 @@ jobs:
       - name: Test API
         run: |
           hurl --variable host=http://localhost:${{ github.event.inputs.PORT }} \
-                  --error-format long --test session.hurl
+           --error-format long \
+           --test session.hurl
+
