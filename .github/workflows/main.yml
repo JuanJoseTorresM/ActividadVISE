@@ -9,7 +9,7 @@ on:
       PORT:
         description: 'The port of your application'
         required: true
-        default: "8000"
+        default: "8000/docs"
 
 # Tareas a ejecutar
 jobs:
