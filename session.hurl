@@ -16,7 +16,6 @@ classic_id: jsonpath "$['clientId']"
 jsonpath "$.status" == "Registered"
 jsonpath "$.cardType" == "Classic"
 
-
 # Gold - valid case (income >= 500)
 POST {{host}}/client
 {
@@ -32,7 +31,6 @@ gold_id: jsonpath "$['clientId']"
 [Asserts]
 jsonpath "$.status" == "Registered"
 jsonpath "$.cardType" == "Gold"
-
 
 # Gold - invalid case (income < 500)
 POST {{host}}/client
@@ -153,7 +151,6 @@ jsonpath "$.purchase.discountApplied" == 30
 jsonpath "$.purchase.finalAmount" == 170
 jsonpath "$.purchase.benefit" contains "15%"
 
-
 # Platinum: Saturday purchase >200 -> 30% discount
 POST {{host}}/purchase
 {
@@ -187,7 +184,6 @@ jsonpath "$.purchase.benefit" contains "20%"
 
 # Platinum: Foreign purchase, 5%
 POST {{host}}/purchase
-Content-Type: application/json
 {
   "clientId": {{ platinum_id }},
   "amount": 100,
@@ -225,7 +221,7 @@ POST {{host}}/purchase
   "purchaseDate": "2025-10-04",
   "purchaseCountry": "USA"
 }
-HTTP/1.1 200
+HTTP 200
 [Asserts]
 jsonpath "$.purchase.discountApplied" == 91
 jsonpath "$.purchase.finalAmount" == 169
