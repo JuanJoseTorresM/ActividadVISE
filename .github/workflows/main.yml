@@ -1,14 +1,11 @@
 # Nombre de la action
 name: Build container and run VISE API testing
 
-# Bajo qué acción se va a ejecutar la action (manual en este caso)
 on:
   workflow_dispatch:
 
-# Tareas a ejecutar
 jobs:
   test:
-    # SO de la máquina virtual
     runs-on: ubuntu-latest
 
     steps:
@@ -28,10 +25,7 @@ jobs:
       # Levantar contenedor
       - name: Run container
         run: |
-          # Eliminar contenedor viejo si existe
           docker rm -f vise-api || true
-          
-          # Levantar nuevo contenedor en puerto 8000
           docker run -d -p 8000:8000 --name vise-api vise-api:latest
           sleep 5
 
@@ -41,5 +35,4 @@ jobs:
 
       # Ejecutar pruebas de API
       - name: Test API
-        run: hurl --variable host=http://localhost:8000 \
-                  --error-format long --test session.hurl
+        run: hurl --variable host=http://localhost:8000 --error-format long --test session.hurl
