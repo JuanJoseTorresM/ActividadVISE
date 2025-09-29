@@ -287,7 +287,8 @@ POST {{host}}/purchase
 }
 HTTP 200
 [Asserts]
-jsonpath "$.purchase.discountApplied" == 0
-jsonpath "$.purchase.finalAmount" == 250.0
-jsonpath "$.purchase.benefit" == null
+jsonpath "$.purchase.discountApplied" == 75
+jsonpath "$.purchase.finalAmount" == 175
+jsonpath "$.purchase.benefit" contains "30%"
+
 
