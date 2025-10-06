@@ -78,4 +78,8 @@ jobs:
       - name: Run Hurl tests against deployed API
         run: |
           hurl --variable host=https://${{ github.event.inputs.AZURE_WEBAPP_NAME }}.azurewebsites.net:${{ github.event.inputs.PORT }} \
-          --connect-timeout 20s --error-format long --verbose --test session.hurl
+          --connect-timeout 20s \
+          --error-format long \
+          --verbose \
+          --test session.hurl
+
