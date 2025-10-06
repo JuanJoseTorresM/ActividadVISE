@@ -1,4 +1,4 @@
-name: Azure Continuous Delivery JUAN JOSE 
+name: Azure Continuous Delivery Juan Jose 
 
 on:
   workflow_dispatch:
@@ -16,8 +16,8 @@ on:
         required: true
       PORT:
         description: 'Port of the application'
-        required: true
         default: '443'
+        required: true
 
 env:
   IMAGE_URL: ${{ secrets.ACR_NAME_JUANJ }}.azurecr.io/${{ github.event.inputs.IMAGE_REPOSITORY }}:${{ github.event.inputs.IMAGE_TAG }}
@@ -26,6 +26,7 @@ jobs:
   build-and-push-image:
     name: 'Build and Push to ACR'
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -48,18 +49,20 @@ jobs:
     name: 'Deploy remote container to Azure'
     runs-on: ubuntu-latest
     needs: build-and-push-image
+
     steps:
       - name: Deploy to Azure Web App for Container
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ github.event.inputs.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_JUAN }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_JUAN}}
           images: ${{ env.IMAGE_URL }}
 
   test-deploy:
     name: 'Test deployed service'
     runs-on: ubuntu-latest
     needs: [build-and-push-image, deploy]
+
     steps:
       - name: Checkout session.hurl
         uses: actions/checkout@v3
@@ -74,4 +77,4 @@ jobs:
       - name: Test API
         run: |
           hurl --variable host=https://${{ github.event.inputs.AZURE_WEBAPP_NAME }}.azurewebsites.net:${{ github.event.inputs.PORT }} \
-          --connect-timeout 20s --error-format long --verbose --test session.hurl
+          --connect-timeout 20s --error-format long --verbose --test session.hurl
