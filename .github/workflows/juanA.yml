@@ -51,6 +51,7 @@ jobs:
       - name: Cleanup local Docker images
         run: docker image prune -af
 
+
   deploy:
     name: 'Deploy remote container to Azure App Service'
     runs-on: ubuntu-latest
