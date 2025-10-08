@@ -12,7 +12,7 @@ on:
         required: true
         default: 'latest'
       AZURE_WEBAPP_NAME:
-        description: 'Nombre del App Service creado en Azure'
+        description: 'viseapidevopsh'
         required: true
       PORT:
         description: 'Port of the application'
