@@ -82,5 +82,4 @@ jobs:
             --connect-timeout 20s \
             --error-format long \
             --verbose \
-            --test \
             session.hurl
