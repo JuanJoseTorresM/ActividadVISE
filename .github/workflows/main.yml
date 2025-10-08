@@ -48,5 +48,5 @@ jobs:
         run: |
           hurl --variable host=http://localhost:${{ github.event.inputs.PORT }} \
            --error-format long \
-           --test session.hurl
+           session.hurl
 
