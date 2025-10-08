@@ -1,26 +1,27 @@
-name: Azure Continuous Delivery JuanAbril
+name: Azure Continuous Delivery - Juan Abril
 
 on:
   workflow_dispatch:
     inputs:
       IMAGE_REPOSITORY:
-        description: 'Repository of the image (same as declared in App Service creation)'
+        description: 'Nombre del repositorio de la imagen (como en el ACR)'
         required: true
         default: 'api-vise'
       IMAGE_TAG:
-        description: 'Tag of the image'
+        description: 'Tag de la imagen'
         required: true
         default: 'latest'
       AZURE_WEBAPP_NAME:
-        description: 'Nombre del App Service creado en Azure'
+        description: 'Nombre del App Service en Azure'
         required: true
+        default: 'appservice-juanabril'
       PORT:
-        description: 'Port of the application'
+        description: 'Puerto de la aplicación'
         required: true
         default: '443'
 
 env:
-  IMAGE_URL: ${{ secrets.ACR_NAME_JUAN_ABRIL }}.azurecr.io/${{ github.event.inputs.IMAGE_REPOSITORY }}:${{ github.event.inputs.IMAGE_TAG }}
+  IMAGE_URL: juandavidabril.azurecr.io/${{ github.event.inputs.IMAGE_REPOSITORY }}:${{ github.event.inputs.IMAGE_TAG }}
 
 jobs:
   build_and_push_image:
@@ -28,61 +29,53 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout código
         uses: actions/checkout@v4
 
-      - name: Docker Login to Azure Container Registry
+      - name: Iniciar sesión en Azure Container Registry
         uses: azure/docker-login@v1
         with:
-          login-server: ${{ secrets.ACR_NAME_JUAN_ABRIL }}.azurecr.io
-          username: ${{ secrets.ACR_NAME_JUAN_ABRIL }}
-          password: ${{ secrets.ACR_PASSWORD_JUAN_ABRIL }}
+          login-server: juandavidabril.azurecr.io
+          username: juandavidabril
+          password: ${{ secrets.ACR_PASSWORD_JUANB }}
 
-      - name: Verify Docker login
-        run: docker info
-
-      - name: Build and Push Docker image to ACR
+      - name: Construir y subir imagen a ACR
         uses: docker/build-push-action@v6
         with:
           push: true
           tags: ${{ env.IMAGE_URL }}
           file: Dockerfile
 
-      - name: Cleanup local Docker images
-        run: docker image prune -af
-
-
   deploy:
-    name: 'Deploy remote container to Azure App Service'
+    name: 'Deploy container a Azure App Service'
     runs-on: ubuntu-latest
     needs: build_and_push_image
 
     steps:
-      - name: Deploy container to Azure Web App
+      - name: Desplegar en Azure App Service
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ github.event.inputs.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_WEB_APP_PUBLISH_PROFILE_JUAN_ABRIL }}
+          publish-profile: ${{ secrets.AZURE_WEB_APP_PUBLISH_PROFILE_JUANB }}
           images: ${{ env.IMAGE_URL }}
 
   test_deploy:
-    name: 'Test deployed service'
+    name: 'Probar API desplegada'
     runs-on: ubuntu-latest
     needs: [build_and_push_image, deploy]
 
     steps:
-      - name: Checkout session.hurl
+      - name: Checkout archivo de pruebas (session.hurl)
         uses: actions/checkout@v4
         with:
           sparse-checkout: |
             session.hurl
           sparse-checkout-cone-mode: false
 
-      - name: Setup Hurl (API testing tool)
+      - name: Instalar Hurl (herramienta para probar APIs)
         uses: gacts/install-hurl@v1
 
-      - name: Test deployed API
-        continue-on-error: true  # El test no detiene el pipeline si falla
+      - name: Probar API desplegada
         run: |
           hurl \
             --variable host=https://${{ github.event.inputs.AZURE_WEBAPP_NAME }}.azurewebsites.net:${{ github.event.inputs.PORT }} \
