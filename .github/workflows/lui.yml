@@ -1,4 +1,4 @@
-name: Azure Continuous Delivery Juan Jose
+name: Azure Continuous Delivery Luis Miguel
 
 on:
   workflow_dispatch:
