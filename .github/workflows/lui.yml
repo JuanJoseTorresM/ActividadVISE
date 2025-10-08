@@ -12,7 +12,7 @@ on:
         required: true
         default: 'latest'
       AZURE_WEBAPP_NAME:
-        description: 'viseapidevopsh'
+        description: 'viseapii'
         required: true
       PORT:
         description: 'Port of the application'
