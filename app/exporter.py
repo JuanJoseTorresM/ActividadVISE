@@ -5,8 +5,8 @@ from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
 
 # Configuración directa de tus credenciales de Axiom
-AXIOM_API_TOKEN = "xaat-c4fbd456-45e7-458d-bb5c-54cf36bbc0d9"
-AXIOM_DATASET = "devops"
+AXIOM_API_TOKEN = "xapt-589ab3cd-bc00-4132-8966-16176e18e836"
+AXIOM_DATASET = "devopss"
 
 # Configurar el exportador OTLP hacia Axiom (región US)
 otlp_exporter = OTLPSpanExporter(
